@@ -29,7 +29,7 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
   const data = Object.fromEntries(formData.entries());
   data.agreement = formData.get("agreement") ? "Yes" : "No";
 
-  fetch("https://script.google.com/macros/s/AKfycbyfvyWtrLOi3r9c7XunXOA-42u9d_5iam2AdddeoH2kwT5geBttkIP8Wo2-WRc5UjqZ/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyI6FycPTAbaUoBBrDQWmIJwWSE3785wAIPjgV8s4chAOFeekHoIBV0aa_EJlC5gRMZ/exec", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
