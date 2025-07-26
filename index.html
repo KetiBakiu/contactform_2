@@ -1,25 +1,99 @@
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    background: #f7f7f7;
+  }
+
+  form#contact-form {
+    background: white;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  form#contact-form h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+  }
+
+  form#contact-form p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  button {
+    background: black;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #333;
+  }
+</style>
+
 <form id="contact-form">
   <h2>Send Us a Message</h2>
   <p>Please fill in the form below to get in touch with us.</p>
 
-  <div style="display:flex;gap:10px">
+  <div class="form-row">
     <input type="text" name="firstName" placeholder="First name" required />
     <input type="text" name="lastName" placeholder="Last name" required />
   </div>
 
-  <div style="display:flex;gap:10px;margin-top:10px">
+  <div class="form-row">
     <input type="email" name="email" placeholder="Email address" required />
     <input type="tel" name="phone" placeholder="Phone Number" />
   </div>
 
-  <textarea name="message" placeholder="Message" required style="margin-top:10px;width:100%"></textarea>
+  <div class="form-row">
+    <textarea name="message" placeholder="Message" required></textarea>
+  </div>
 
-  <label style="display:block;margin-top:10px">
+  <label>
     <input type="checkbox" name="agreement" required />
     I’ve read and agree with <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
   </label>
 
-  <button type="submit" style="margin-top:10px">Submit</button>
+  <button type="submit">Submit</button>
 </form>
 
 <script>
@@ -34,7 +108,7 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
   .then(response => response.text())
   .then(text => {
     alert("Success!");
-    this.reset(); // optional: clear form after submit
+    this.reset();
   })
   .catch(error => {
     alert("Submission failed: " + error.message);
