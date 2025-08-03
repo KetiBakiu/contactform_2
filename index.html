@@ -1,13 +1,10 @@
-<!-- 
-3. Host the full HTML/CSS/JS (that I gave you earlier) on GitHub Pages or your web host.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Form</title>
+
   <style>
     body {
       font-family: sans-serif;
@@ -16,7 +13,6 @@
       padding: 40px;
       background: #f7f7f7;
     }
-
     form#contact-form {
       background: white;
       padding: 30px;
@@ -25,23 +21,19 @@
       border-radius: 10px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
-
     form#contact-form h2 {
       margin-bottom: 10px;
       font-size: 24px;
     }
-
     form#contact-form p {
       margin-bottom: 20px;
       color: #666;
     }
-
     .form-row {
       display: flex;
       gap: 10px;
       margin-bottom: 15px;
     }
-
     input, textarea {
       padding: 10px;
       border: 1px solid #ccc;
@@ -50,20 +42,15 @@
       width: 100%;
       box-sizing: border-box;
     }
-
     textarea {
       min-height: 100px;
       resize: vertical;
     }
-
     label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
+      display: block;
+      margin-bottom: 10px;
       font-size: 14px;
     }
-
     button {
       background: black;
       color: white;
@@ -74,15 +61,16 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     button:hover {
       background: #333;
     }
   </style>
+
+  <!-- Google reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
-
-  <form id="contact-form">
+  <form id="contact-form" enctype="multipart/form-data">
     <h2>Send Us a Message</h2>
     <p>Please fill in the form below to get in touch with us.</p>
 
@@ -100,10 +88,10 @@
       <textarea name="message" placeholder="Message" required></textarea>
     </div>
 
-    <label>
-      <input type="checkbox" name="agreement" required />
-      I’ve read and agree with <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-    </label>
+    <label>Upload your CV (PDF): <input type="file" name="cv" accept=".pdf" required /></label>
+    <label>Upload Motivation Letter (PDF): <input type="file" name="motivation" accept=".pdf" required /></label>
+
+    <div class="g-recaptcha" data-sitekey="6LdMHJkrAAAAAIPHG_tU3WIA7KSt3fuE-H9FF3XM" style="margin-bottom:15px;"></div>
 
     <button type="submit">Submit</button>
   </form>
@@ -111,22 +99,32 @@
   <script>
     document.getElementById("contact-form").addEventListener("submit", function(e) {
       e.preventDefault();
-      const formData = new FormData(this);
+
+      const form = this;
+      const formData = new FormData(form);
+
+      // Ensure reCAPTCHA is passed
+      const captchaResponse = grecaptcha.getResponse();
+      if (!captchaResponse) {
+        alert("Please complete the CAPTCHA.");
+        return;
+      }
+      formData.append("g-recaptcha-response", captchaResponse);
 
       fetch("https://script.google.com/macros/s/AKfycbxL2lHX9I06F6wPJhvd-a9hijB7F7MNEgHr8QR6Uh0a2J2nlIoRdYSsisREpgvKgXZ1/exec", {
         method: "POST",
         body: formData
       })
-      .then(response => response.text())
-      .then(text => {
-        alert("Success!");
-        this.reset();
-      })
-      .catch(error => {
-        alert("Submission failed: " + error.message);
-      });
+        .then((res) => res.text())
+        .then((text) => {
+          alert("Success!");
+          form.reset();
+          grecaptcha.reset();
+        })
+        .catch((err) => {
+          alert("Submission failed: " + err.message);
+        });
     });
   </script>
-
 </body>
 </html>
