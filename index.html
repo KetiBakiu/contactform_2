@@ -3,12 +3,6 @@
     e.preventDefault();
     const form = e.target;
 
-    const captchaResponse = grecaptcha.getResponse();
-    if (!captchaResponse) {
-      alert("Please complete the CAPTCHA.");
-      return;
-    }
-
     const toBase64 = file => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -33,7 +27,6 @@
       email: form.email.value,
       phone: form.phone.value,
       message: form.message.value,
-      "g-recaptcha-response": captchaResponse,
       cvBase64,
       motivationBase64
     });
@@ -44,15 +37,8 @@
     })
     .then(res => res.text())
     .then(text => {
-      if (text.includes("CAPTCHA failed")) {
-        alert("CAPTCHA verification failed. Please try again.");
-      } else if (text.includes("Form submitted successfully")) {
-        alert("Thank you! Your form has been submitted.");
-        form.reset();
-        grecaptcha.reset();
-      } else {
-        alert("Unexpected response: " + text);
-      }
+      alert(text);
+      form.reset();
     })
     .catch(err => alert("Error: " + err.message));
   });
